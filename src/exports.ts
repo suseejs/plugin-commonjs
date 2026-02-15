@@ -120,32 +120,33 @@ function commonjsExportsHandler(
                 }
               }
             }
-          } else if (ts.isVariableStatement(node)) {
-            let __name: string | undefined = undefined;
-            const decls = node.declarationList.declarations;
-            if (decls.length === 1) {
-              const decl = decls[0] as ts.VariableDeclaration;
-              if (ts.isIdentifier(decl.name)) {
-                __name = decl.name.text;
-              }
-              if (
-                decl.initializer &&
-                ts.isBinaryExpression(decl.initializer) &&
-                ts.isPropertyAccessExpression(decl.initializer.left)
-              ) {
-                const __left = decl.initializer.left;
-                const __right = decl.initializer.right;
-                if (
-                  ts.isIdentifier(__left.expression) &&
-                  __left.expression.text === "module" &&
-                  ts.isIdentifier(__left.name) &&
-                  __left.name.text === "exports"
-                ) {
-                  //TODO
-                }
-              }
-            }
-          }
+          } 
+          // else if (ts.isVariableStatement(node)) {
+          //   let __name: string | undefined = undefined;
+          //   const decls = node.declarationList.declarations;
+          //   if (decls.length === 1) {
+          //     const decl = decls[0] as ts.VariableDeclaration;
+          //     if (ts.isIdentifier(decl.name)) {
+          //       __name = decl.name.text;
+          //     }
+          //     if (
+          //       decl.initializer &&
+          //       ts.isBinaryExpression(decl.initializer) &&
+          //       ts.isPropertyAccessExpression(decl.initializer.left)
+          //     ) {
+          //       const __left = decl.initializer.left;
+          //       const __right = decl.initializer.right;
+          //       if (
+          //         ts.isIdentifier(__left.expression) &&
+          //         __left.expression.text === "module" &&
+          //         ts.isIdentifier(__left.name) &&
+          //         __left.name.text === "exports"
+          //       ) {
+          //         //TODO
+          //       }
+          //     }
+          //   }
+          // }
           /* ----------------------Returns for visitor function------------------------------- */
           return ts.visitEachChild(node, visitor, context);
         };
