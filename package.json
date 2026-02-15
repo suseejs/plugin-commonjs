@@ -1,0 +1,46 @@
+{
+  "name": "@suseejs/plugin-commonjs",
+  "version": "1.0.0",
+  "description": "Susee plugin for commonjs",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.cts",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "susee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suseejs/plugin-commonjs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suseejs/plugin-commonjs/issues"
+  },
+  "homepage": "https://github.com/suseejs/plugin-commonjs#readme",
+  "dependencies": {
+    "@phothinmaung/resolves": "^1.0.0",
+    "@suseejs/transformer": "^0.1.0",
+    "@suseejs/types": "^0.1.10",
+    "@suseejs/utils": "^0.1.3",
+    "susee": "^0.1.5",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3"
+  }
+}
