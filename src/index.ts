@@ -1,4 +1,3 @@
-import ts from "typescript";
 import type { SuseePlugin } from "@suseejs/types";
 import resolves from "@phothinmaung/resolves";
 import utilities from "@suseejs/utils";
@@ -7,15 +6,14 @@ import commonjsImportsHandler from "./imports.js";
 
 /**
  * A Susee plugin that transforms commonjs exports and imports into ES modules.
- * @param {ts.CompilerOptions} compilerOptions - The compiler options.
  * @returns {SuseePlugin} - A Susee plugin.
  */
-function suseeCommonJS(compilerOptions: ts.CompilerOptions): SuseePlugin {
+function suseeCommonJS(): SuseePlugin {
   return {
     type: "dependency",
     async: true,
     name: "@suseejs/plugin-commonjs",
-    func: async (deps) => {
+    func: async (deps, compilerOptions) => {
       const resolvedHandler = resolves([
         [commonjsExportsHandler, compilerOptions],
         [commonjsImportsHandler, compilerOptions],
