@@ -26,8 +26,12 @@
     "url": "git+https://github.com/suseejs/plugin-commonjs.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Pho Thin Mg",
+    "email": "phothinmg@disroot.org",
+    "url": "https://phothinmg.github.io/"
+  },
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/suseejs/plugin-commonjs/issues"
   },
@@ -42,5 +46,14 @@
   },
   "devDependencies": {
     "@types/node": "^25.2.3"
+  },
+  "files": [
+    "dist/**/*",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
