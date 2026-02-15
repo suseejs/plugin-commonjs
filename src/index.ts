@@ -21,9 +21,14 @@ function suseeCommonJS(): SuseePlugin {
       const resolved = await resolvedHandler.series();
       for (const res of resolved) {
         await utilities.wait(500);
-        deps = deps.map(res);
+        deps = deps.map((dep) => {
+          dep = res(dep);
+          dep.type = "esm";
+          return dep;
+        });
         await utilities.wait(500);
       }
+
       return deps;
     },
   };

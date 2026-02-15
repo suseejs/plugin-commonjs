@@ -28,28 +28,54 @@ function commonjsExportsHandler(
           ) {
             const leftExpression = node.expression.left.expression;
             const leftIdenName = node.expression.left.name;
+            const rn = node.expression.right;
             if (
               ts.isIdentifier(leftExpression) &&
               ts.isIdentifier(leftIdenName)
             ) {
               const exprName = leftExpression.text;
               const leftName = leftIdenName.text;
+              const _exportKeyword = factory.createModifier(
+                ts.SyntaxKind.ExportKeyword,
+              );
+              const _defaultKeyword = factory.createModifier(
+                ts.SyntaxKind.DefaultKeyword,
+              );
               if (exprName === "module" && leftName === "exports") {
-                const newExportAssignment = factory.createExportAssignment(
-                  [
-                    factory.createToken(ts.SyntaxKind.ExportKeyword),
-                    factory.createToken(ts.SyntaxKind.DefaultKeyword),
-                  ],
-                  false,
-                  node.expression.right,
-                );
-                return newExportAssignment;
-              } else if (exprName === "exports") {
-                const rn = node.expression.right;
+                if (ts.isFunctionExpression(rn)) {
+                  return factory.createFunctionDeclaration(
+                    [_exportKeyword, _defaultKeyword],
+                    rn.asteriskToken,
+                    rn.name ?? undefined,
+                    rn.typeParameters,
+                    rn.parameters,
+                    rn.type,
+                    rn.body,
+                  );
+                } else if (ts.isClassExpression(rn)) {
+                  return factory.createClassDeclaration(
+                    [_exportKeyword, _defaultKeyword],
+                    rn.name ?? undefined,
+                    rn.typeParameters,
+                    rn.heritageClauses,
+                    rn.members,
+                  );
+                } else if (
+                  ts.isObjectLiteralExpression(rn) ||
+                  ts.isArrayLiteralExpression(rn) ||
+                  ts.isStringLiteral(rn) ||
+                  ts.isNumericLiteral(rn) ||
+                  ts.isCallExpression(rn) ||
+                  ts.isIdentifier(rn) ||
+                  ts.isArrowFunction(rn)
+                ) {
+                  return factory.createExportAssignment(undefined, false, rn);
+                }
+              }
+              // ================================================================================== //
+              else if (exprName === "exports") {
                 const _name = factory.createIdentifier(leftName);
-                const _exportKeyword = factory.createModifier(
-                  ts.SyntaxKind.ExportKeyword,
-                );
+
                 // function
                 if (ts.isFunctionExpression(rn)) {
                   return factory.createFunctionDeclaration(
@@ -66,7 +92,9 @@ function commonjsExportsHandler(
                   ts.isArrayLiteralExpression(rn) ||
                   ts.isStringLiteral(rn) ||
                   ts.isNumericLiteral(rn) ||
-                  ts.isCallExpression(rn)
+                  ts.isCallExpression(rn) ||
+                  ts.isIdentifier(rn) ||
+                  ts.isArrowFunction(rn)
                 ) {
                   const varDecl = factory.createVariableDeclaration(
                     _name,
@@ -89,6 +117,31 @@ function commonjsExportsHandler(
                     rn.heritageClauses,
                     rn.members,
                   );
+                }
+              }
+            }
+          } else if (ts.isVariableStatement(node)) {
+            let __name: string | undefined = undefined;
+            const decls = node.declarationList.declarations;
+            if (decls.length === 1) {
+              const decl = decls[0] as ts.VariableDeclaration;
+              if (ts.isIdentifier(decl.name)) {
+                __name = decl.name.text;
+              }
+              if (
+                decl.initializer &&
+                ts.isBinaryExpression(decl.initializer) &&
+                ts.isPropertyAccessExpression(decl.initializer.left)
+              ) {
+                const __left = decl.initializer.left;
+                const __right = decl.initializer.right;
+                if (
+                  ts.isIdentifier(__left.expression) &&
+                  __left.expression.text === "module" &&
+                  ts.isIdentifier(__left.name) &&
+                  __left.name.text === "exports"
+                ) {
+                  //TODO
                 }
               }
             }
