@@ -1,7 +1,7 @@
 import ts from "typescript";
 import transformFunction from "@suseejs/transformer";
 import type {
-  DepsFile,
+  DependenciesFile,
   RequireImportObject,
   BundleHandler,
 } from "@suseejs/types";
@@ -34,8 +34,11 @@ function commonjsImportsHandler(
 ): BundleHandler {
   let properties: string[] = [];
   let removedStatements: string[] = [];
-  return (deps: DepsFile) => {
-    if (deps.type && deps.type === "cjs") {
+  return (deps: DependenciesFile) => {
+    if (
+      deps.moduleType === "cjs" &&
+      (deps.fileExt === ".js" || deps.fileExt === ".cjs")
+    ) {
       const sourceFile = ts.createSourceFile(
         deps.file,
         deps.content,
@@ -129,7 +132,7 @@ function commonjsImportsHandler(
       _content = `${removedStatements.join("\n")}\n${_content}`;
       _content = _content.replace(/^s*;\s*$/gm, "").trim();
       const { file, content, ...rest } = deps;
-      return { file, content: _content, ...rest } as DepsFile;
+      return { file, content: _content, ...rest } as DependenciesFile;
     } else {
       return deps;
     }

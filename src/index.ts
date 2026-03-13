@@ -1,7 +1,9 @@
 import type { SuseePlugin } from "@suseejs/types";
 import resolves from "@phothinmaung/resolves";
 import utilities from "@suseejs/utils";
+
 import commonjsExportsHandler from "./exports.js";
+
 import commonjsImportsHandler from "./imports.js";
 
 /**
@@ -23,7 +25,7 @@ function suseeCommonJS(): SuseePlugin {
         await utilities.wait(500);
         deps = deps.map((dep) => {
           dep = res(dep);
-          dep.type = "esm";
+          dep.moduleType = "esm";
           return dep;
         });
         await utilities.wait(500);
